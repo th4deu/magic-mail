@@ -1,10 +1,9 @@
-export type MessageMode = 'anonymous' | 'identified';
+export type MessageSource = 'email' | 'anonymous';
 
 export interface Box {
   slug: string;
   domain: string;
   token: string;
-  messageMode: MessageMode;
   createdAt: string;
 }
 
@@ -13,12 +12,12 @@ export interface Message {
   content: string;
   isRead: boolean;
   createdAt: string;
-  // Email mode fields (when box.messageMode is 'identified')
+  source?: MessageSource;  // 'email' or 'anonymous' - undefined for legacy messages
+  // Email fields (when source is 'email')
   from?: string;        // Sender email address
   fromName?: string;    // Sender display name
   subject?: string;     // Email subject
   replyTo?: string;     // Reply-to address
-  // Anonymous mode has no sender info
 }
 
 export interface BoxesIndex {
@@ -34,13 +33,16 @@ export interface TokenLookup {
 }
 
 export const ALLOWED_DOMAINS = [
+  'porranenhuma.com',  // Default domain (first)
   'biscoito.email',
   'bolacha.email',
   'tuamaeaquelaursa.email',
   'aquelaursa.email',
   'xablau.email',
-  'porranenhuma.com',
+  'suamaeaquelaursa.com',
 ] as const;
+
+export const DEFAULT_DOMAIN = ALLOWED_DOMAINS[0];
 
 export type AllowedDomain = typeof ALLOWED_DOMAINS[number];
 

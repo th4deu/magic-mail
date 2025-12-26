@@ -154,23 +154,39 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="bg-white rounded-2xl p-6 text-center border-2 border-gray-100 hover:border-violet-300 transition-colors">
-              <div className="text-4xl mb-3">🔒</div>
+              <div className="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <svg className="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">100%</div>
               <div className="text-sm text-gray-500">Privado</div>
             </div>
             <div className="bg-white rounded-2xl p-6 text-center border-2 border-gray-100 hover:border-pink-300 transition-colors">
-              <div className="text-4xl mb-3">⚡</div>
+              <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <svg className="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">2s</div>
               <div className="text-sm text-gray-500">Para criar</div>
             </div>
             <div className="bg-white rounded-2xl p-6 text-center border-2 border-gray-100 hover:border-emerald-300 transition-colors">
-              <div className="text-4xl mb-3">🎉</div>
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">Grátis</div>
               <div className="text-sm text-gray-500">Sempre</div>
             </div>
             <div className="bg-white rounded-2xl p-6 text-center border-2 border-gray-100 hover:border-cyan-300 transition-colors">
-              <div className="text-4xl mb-3">🚀</div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">6</div>
+              <div className="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <svg className="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                </svg>
+              </div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">7</div>
               <div className="text-sm text-gray-500">Domínios</div>
             </div>
           </div>

@@ -2,15 +2,15 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import MessageCard from './MessageCard';
-
-type MessageMode = 'anonymous' | 'identified';
+import { MessageSource } from '@/types';
 
 interface Message {
   id: string;
   content: string;
   isRead: boolean;
   createdAt: string;
-  // Email mode fields
+  source?: MessageSource;
+  // Email fields
   from?: string;
   fromName?: string;
   subject?: string;
@@ -22,7 +22,6 @@ interface BoxInfo {
   domain: string;
   email: string;
   publicUrl: string;
-  messageMode: MessageMode;
   createdAt: string;
 }
 
@@ -43,7 +42,7 @@ export default function MessageList({ token }: MessageListProps) {
   const [data, setData] = useState<InboxData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [isPolling, setIsPolling] = useState(true);
@@ -85,17 +84,14 @@ export default function MessageList({ token }: MessageListProps) {
     return () => clearInterval(intervalId);
   }, [fetchMessages, isPolling]);
 
-  const copyLink = async () => {
-    if (data?.box) {
-      const textToCopy = data.box.messageMode === 'identified' ? data.box.email : data.box.publicUrl;
-      await navigator.clipboard.writeText(textToCopy);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
+  const copyToClipboard = async (text: string, type: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopied(type);
+    setTimeout(() => setCopied(null), 2000);
   };
 
   const handleDeleteBox = async () => {
-    if (!confirm('Tem certeza que deseja deletar esta caixa e todas as mensagens? Esta ação não pode ser desfeita.')) {
+    if (!confirm('Tem certeza que deseja deletar esta caixa e todas as mensagens? Esta acao nao pode ser desfeita.')) {
       return;
     }
 
@@ -133,7 +129,7 @@ export default function MessageList({ token }: MessageListProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 className="font-semibold text-red-800 mb-2">Não foi possível carregar</h2>
+          <h2 className="font-semibold text-red-800 mb-2">Nao foi possivel carregar</h2>
           <p className="text-red-600 text-sm">{error}</p>
         </div>
       </div>
@@ -150,12 +146,8 @@ export default function MessageList({ token }: MessageListProps) {
       <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-gray-100 mb-8">
         <div className="flex items-start justify-between gap-4 mb-5">
           <div className="flex items-center gap-4">
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
-              data.box.messageMode === 'identified' ? 'bg-blue-100' : 'bg-fuchsia-100'
-            }`}>
-              <svg className={`w-7 h-7 ${
-                data.box.messageMode === 'identified' ? 'text-blue-600' : 'text-fuchsia-600'
-              }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-violet-500 to-fuchsia-500">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </div>
@@ -164,29 +156,18 @@ export default function MessageList({ token }: MessageListProps) {
                 <h1 className="text-xl font-bold text-gray-900">
                   {data.box.email}
                 </h1>
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
-                  data.box.messageMode === 'identified'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'bg-fuchsia-100 text-fuchsia-700'
-                }`}>
-                  {data.box.messageMode === 'identified' ? 'Email' : 'Anonimo'}
-                </span>
               </div>
               <div className="flex items-center gap-3 mt-1">
                 <span className="inline-flex items-center gap-1.5 text-sm text-gray-500">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  {data.totalMessages} {data.box.messageMode === 'identified' ? 'email' : 'mensagen'}{data.totalMessages !== 1 ? 's' : ''}
+                  {data.totalMessages} mensagen{data.totalMessages !== 1 ? 's' : ''}
                 </span>
                 {data.unreadCount > 0 && (
-                  <span className={`inline-flex items-center gap-1.5 text-sm font-medium ${
-                    data.box.messageMode === 'identified' ? 'text-blue-600' : 'text-fuchsia-600'
-                  }`}>
-                    <span className={`w-2 h-2 rounded-full ${
-                      data.box.messageMode === 'identified' ? 'bg-blue-500' : 'bg-fuchsia-500'
-                    }`} />
-                    {data.unreadCount} nov{data.unreadCount !== 1 ? 'os' : 'o'}
+                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-violet-600">
+                    <span className="w-2 h-2 rounded-full bg-violet-500" />
+                    {data.unreadCount} nov{data.unreadCount !== 1 ? 'as' : 'a'}
                   </span>
                 )}
               </div>
@@ -204,28 +185,52 @@ export default function MessageList({ token }: MessageListProps) {
           </button>
         </div>
 
-        {/* Share Link/Email */}
-        <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
-          <p className="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">
-            {data.box.messageMode === 'identified' ? 'Seu email temporario' : 'Link para compartilhar'}
-          </p>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              readOnly
-              value={data.box.messageMode === 'identified' ? data.box.email : data.box.publicUrl}
-              className="flex-1 px-4 py-2.5 bg-white rounded-xl text-sm font-mono text-gray-700 border border-gray-200"
-            />
-            <button
-              onClick={copyLink}
-              className={`px-5 py-2.5 text-white rounded-xl transition-colors font-medium text-sm ${
-                data.box.messageMode === 'identified'
-                  ? 'bg-blue-500 hover:bg-blue-600'
-                  : 'bg-fuchsia-500 hover:bg-fuchsia-600'
-              }`}
-            >
-              {copied ? 'Copiado!' : 'Copiar'}
-            </button>
+        {/* Share Links */}
+        <div className="space-y-3">
+          {/* Email */}
+          <div className="bg-blue-50 rounded-xl p-3 border border-blue-100">
+            <p className="text-xs text-blue-600 mb-2 font-medium">Seu email temporario</p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                readOnly
+                value={data.box.email}
+                className="flex-1 px-3 py-2 bg-white rounded-lg text-sm font-mono text-gray-700 border border-blue-200"
+              />
+              <button
+                onClick={() => copyToClipboard(data.box.email, 'email')}
+                className={`px-4 py-2 text-sm rounded-lg transition-colors font-medium ${
+                  copied === 'email'
+                    ? 'bg-emerald-500 text-white'
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                }`}
+              >
+                {copied === 'email' ? 'Copiado!' : 'Copiar'}
+              </button>
+            </div>
+          </div>
+
+          {/* Public Link */}
+          <div className="bg-fuchsia-50 rounded-xl p-3 border border-fuchsia-100">
+            <p className="text-xs text-fuchsia-600 mb-2 font-medium">Link para mensagens anonimas</p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                readOnly
+                value={data.box.publicUrl}
+                className="flex-1 px-3 py-2 bg-white rounded-lg text-sm font-mono text-gray-700 border border-fuchsia-200"
+              />
+              <button
+                onClick={() => copyToClipboard(data.box.publicUrl, 'public')}
+                className={`px-4 py-2 text-sm rounded-lg transition-colors font-medium ${
+                  copied === 'public'
+                    ? 'bg-emerald-500 text-white'
+                    : 'bg-fuchsia-500 text-white hover:bg-fuchsia-600'
+                }`}
+              >
+                {copied === 'public' ? 'Copiado!' : 'Copiar'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -233,40 +238,37 @@ export default function MessageList({ token }: MessageListProps) {
       {/* Messages */}
       {data.messages.length === 0 ? (
         <div className="bg-white rounded-3xl p-12 text-center shadow-sm border-2 border-gray-100">
-          <div className={`w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 ${
-            data.box.messageMode === 'identified' ? 'bg-blue-100' : 'bg-fuchsia-100'
-          }`}>
-            <svg className={`w-10 h-10 ${
-              data.box.messageMode === 'identified' ? 'text-blue-400' : 'text-fuchsia-400'
-            }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-violet-100 to-fuchsia-100">
+            <svg className="w-10 h-10 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
             </svg>
           </div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">
-            {data.box.messageMode === 'identified' ? 'Nenhum email ainda' : 'Nenhuma mensagem ainda'}
+            Nenhuma mensagem ainda
           </h2>
           <p className="text-gray-500 mb-6">
-            {data.box.messageMode === 'identified'
-              ? 'Use este email para cadastros em sites e receba os emails aqui.'
-              : 'Compartilhe seu link para comecar a receber mensagens anonimas.'}
+            Use o email para cadastros em sites ou compartilhe o link para receber mensagens anonimas.
           </p>
-          <button
-            onClick={copyLink}
-            className={`inline-flex items-center gap-2 px-6 py-3 text-white rounded-xl transition-all font-medium shadow-lg ${
-              data.box.messageMode === 'identified'
-                ? 'bg-blue-500 hover:bg-blue-600 shadow-blue-200'
-                : 'bg-fuchsia-500 hover:bg-fuchsia-600 shadow-fuchsia-200'
-            }`}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {data.box.messageMode === 'identified' ? (
+          <div className="flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => copyToClipboard(data.box.email, 'email')}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-500 text-white rounded-xl transition-all font-medium text-sm hover:bg-blue-600"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              ) : (
+              </svg>
+              Copiar email
+            </button>
+            <button
+              onClick={() => copyToClipboard(data.box.publicUrl, 'public')}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-fuchsia-500 text-white rounded-xl transition-all font-medium text-sm hover:bg-fuchsia-600"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              )}
-            </svg>
-            {data.box.messageMode === 'identified' ? 'Copiar email' : 'Copiar link para compartilhar'}
-          </button>
+              </svg>
+              Copiar link
+            </button>
+          </div>
         </div>
       ) : (
         <div className="space-y-4">
@@ -274,7 +276,6 @@ export default function MessageList({ token }: MessageListProps) {
             <MessageCard
               key={message.id}
               message={message}
-              messageMode={data.box.messageMode}
               token={token}
               onUpdate={fetchMessages}
             />
@@ -296,7 +297,7 @@ export default function MessageList({ token }: MessageListProps) {
           )}
           {lastUpdate && (
             <span className="text-gray-400">
-              · Última atualização: {lastUpdate.toLocaleTimeString('pt-BR')}
+              · Ultima atualizacao: {lastUpdate.toLocaleTimeString('pt-BR')}
             </span>
           )}
         </div>

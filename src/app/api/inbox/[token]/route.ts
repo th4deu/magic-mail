@@ -31,7 +31,6 @@ export async function GET(request: NextRequest, { params }: Params) {
         domain: box.domain,
         email: `${box.slug}@${box.domain}`,
         publicUrl,
-        messageMode: box.messageMode,
         createdAt: box.createdAt,
       },
       messages,

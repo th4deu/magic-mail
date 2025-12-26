@@ -1,0 +1,8 @@
+name = "magic-mails-worker"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Binding para o R2 bucket
+[[r2_buckets]]
+binding = "INBOX_BUCKET"
+bucket_name = "magic-mails-inboxes"

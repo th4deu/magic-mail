@@ -85,6 +85,7 @@ export async function POST(request: NextRequest) {
       content: content.trim(),
       isRead: false,
       createdAt: now,
+      source: 'anonymous',
     };
 
     // Save message to S3

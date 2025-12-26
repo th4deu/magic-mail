@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { ALLOWED_DOMAINS, MessageMode } from '@/types';
+import { ALLOWED_DOMAINS } from '@/types';
 
 interface BoxResult {
   slug: string;
@@ -10,7 +10,17 @@ interface BoxResult {
   publicUrl: string;
   inboxUrl: string;
   email: string;
-  messageMode: MessageMode;
+}
+
+// Nomes reais para fallback
+const FIRST_NAMES = ['joao', 'maria', 'pedro', 'ana', 'lucas', 'julia', 'gabriel', 'beatriz', 'rafael', 'camila'];
+const LAST_NAMES = ['silva', 'santos', 'oliveira', 'souza', 'costa', 'pereira', 'lima', 'rodrigues', 'almeida', 'nascimento'];
+
+function generateFallbackName(): string {
+  const firstName = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)];
+  const lastName = LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)];
+  const num = Math.floor(Math.random() * 99) + 1;
+  return `${firstName}.${lastName}${num}`;
 }
 
 export default function CreateBoxForm() {
@@ -24,7 +34,6 @@ export default function CreateBoxForm() {
   const [suggestedName, setSuggestedName] = useState('');
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [checking, setChecking] = useState(false);
-  const [messageMode, setMessageMode] = useState<MessageMode>('identified');
 
   const suggestName = useCallback(async () => {
     setSuggesting(true);
@@ -37,12 +46,7 @@ export default function CreateBoxForm() {
         setIsAvailable(null);
       }
     } catch {
-      const adjectives = ['azul', 'verde', 'dourado', 'solar', 'lunar', 'veloz', 'sereno', 'magico'];
-      const nouns = ['lobo', 'falcao', 'coruja', 'fenix', 'aurora', 'estrela', 'oceano', 'floresta'];
-      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-      const noun = nouns[Math.floor(Math.random() * nouns.length)];
-      const num = Math.floor(Math.random() * 100);
-      const fallbackName = `${noun}${adj}${num}`;
+      const fallbackName = generateFallbackName();
       setSuggestedName(fallbackName);
       setCustomName(fallbackName);
       setIsAvailable(null);
@@ -85,7 +89,7 @@ export default function CreateBoxForm() {
       const response = await fetch('/api/boxes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ domain: selectedDomain, slug: customName || undefined, messageMode }),
+        body: JSON.stringify({ domain: selectedDomain, slug: customName || undefined }),
       });
 
       const data = await response.json();
@@ -109,74 +113,85 @@ export default function CreateBoxForm() {
   };
 
   if (result) {
-    const isEmailMode = result.messageMode === 'identified';
-
     return (
       <div className="w-full max-w-xl mx-auto">
         {/* Success Card */}
-        <div className={`rounded-3xl p-8 mb-8 border-2 ${
-          isEmailMode ? 'bg-blue-50 border-blue-200' : 'bg-fuchsia-50 border-fuchsia-200'
-        }`}>
+        <div className="rounded-3xl p-8 mb-8 border-2 bg-violet-50 border-violet-200">
           <div className="flex items-center gap-4 mb-4">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${
-              isEmailMode ? 'bg-blue-500' : 'bg-fuchsia-500'
-            }`}>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-violet-500">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                {isEmailMode ? 'Email criado!' : 'Caixa criada!'}
-              </h2>
+              <h2 className="text-2xl font-bold text-gray-900">Caixa criada!</h2>
               <p className="text-gray-600 font-mono">{result.email}</p>
             </div>
           </div>
           <p className="text-gray-600 text-sm">
-            {isEmailMode
-              ? 'Use este email para se cadastrar em sites. Os emails chegarao na sua caixa de entrada.'
-              : 'Compartilhe o link publico para receber mensagens anonimas. Guarde o link privado para ver suas mensagens.'}
+            Use o email para cadastros em sites e o link para receber mensagens anônimas. Tudo chega na mesma caixa!
           </p>
         </div>
 
         <div className="space-y-4">
-          {/* Email or Public Link */}
+          {/* Email */}
           <div className="bg-white rounded-2xl p-5 border-2 border-gray-100 shadow-sm">
             <div className="flex items-center gap-3 mb-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                isEmailMode ? 'bg-blue-100' : 'bg-fuchsia-100'
-              }`}>
-                <svg className={`w-5 h-5 ${isEmailMode ? 'text-blue-600' : 'text-fuchsia-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {isEmailMode ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                  )}
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-100">
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
               <div>
-                <span className="text-sm font-semibold text-gray-900">
-                  {isEmailMode ? 'Seu email temporario' : 'Link para compartilhar'}
-                </span>
-                <p className="text-xs text-gray-500">
-                  {isEmailMode ? 'Use para cadastros em sites' : 'Envie para receber mensagens'}
-                </p>
+                <span className="text-sm font-semibold text-gray-900">Seu email temporário</span>
+                <p className="text-xs text-gray-500">Use para cadastros em sites</p>
               </div>
             </div>
             <div className="flex gap-2">
               <input
                 type="text"
                 readOnly
-                value={isEmailMode ? result.email : result.publicUrl}
+                value={result.email}
                 className="flex-1 px-4 py-3 bg-gray-50 rounded-xl text-sm font-mono text-gray-800 border border-gray-200"
               />
               <button
-                onClick={() => copyToClipboard(isEmailMode ? result.email : result.publicUrl, 'public')}
+                onClick={() => copyToClipboard(result.email, 'email')}
+                className={`px-5 py-3 rounded-xl font-medium transition-all ${
+                  copied === 'email'
+                    ? 'bg-emerald-500 text-white'
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                }`}
+              >
+                {copied === 'email' ? 'Copiado!' : 'Copiar'}
+              </button>
+            </div>
+          </div>
+
+          {/* Public Link */}
+          <div className="bg-white rounded-2xl p-5 border-2 border-gray-100 shadow-sm">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-fuchsia-100">
+                <svg className="w-5 h-5 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              </div>
+              <div>
+                <span className="text-sm font-semibold text-gray-900">Link para mensagens anônimas</span>
+                <p className="text-xs text-gray-500">Compartilhe para receber mensagens secretas</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                readOnly
+                value={result.publicUrl}
+                className="flex-1 px-4 py-3 bg-gray-50 rounded-xl text-sm font-mono text-gray-800 border border-gray-200"
+              />
+              <button
+                onClick={() => copyToClipboard(result.publicUrl, 'public')}
                 className={`px-5 py-3 rounded-xl font-medium transition-all ${
                   copied === 'public'
                     ? 'bg-emerald-500 text-white'
-                    : isEmailMode
-                    ? 'bg-blue-500 text-white hover:bg-blue-600'
                     : 'bg-fuchsia-500 text-white hover:bg-fuchsia-600'
                 }`}
               >
@@ -222,11 +237,7 @@ export default function CreateBoxForm() {
           <div className="flex gap-3 pt-4">
             <a
               href={result.inboxUrl}
-              className={`flex-1 text-center px-6 py-4 rounded-2xl font-bold transition-all shadow-lg ${
-                isEmailMode
-                  ? 'bg-blue-500 text-white hover:bg-blue-600 shadow-blue-200'
-                  : 'bg-fuchsia-500 text-white hover:bg-fuchsia-600 shadow-fuchsia-200'
-              }`}
+              className="flex-1 text-center px-6 py-4 rounded-2xl font-bold transition-all shadow-lg bg-violet-500 text-white hover:bg-violet-600 shadow-violet-200"
             >
               Abrir minha caixa
             </a>
@@ -248,37 +259,93 @@ export default function CreateBoxForm() {
 
   return (
     <div className="w-full max-w-3xl mx-auto">
-      {/* Dynamic Title */}
+      {/* Title with animated envelope */}
       <div className="text-center mb-12">
         <div className="inline-block mb-8">
-          <div className={`w-24 h-24 rounded-3xl flex items-center justify-center transform hover:scale-110 hover:rotate-6 transition-all duration-300 cursor-pointer shadow-lg ${
-            messageMode === 'identified' ? 'bg-blue-500' : 'bg-fuchsia-500'
-          }`}>
-            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {messageMode === 'identified' ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              )}
-            </svg>
-          </div>
+          <style>{`
+            @keyframes float {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-8px); }
+            }
+            @keyframes wiggle {
+              0%, 100% { transform: rotate(-3deg); }
+              50% { transform: rotate(3deg); }
+            }
+            @keyframes pulse-glow {
+              0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+              50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.5); }
+            }
+            .float-animation { animation: float 3s ease-in-out infinite; }
+            .wiggle-animation { animation: wiggle 2s ease-in-out infinite; }
+            .pulse-glow-animation { animation: pulse-glow 2s ease-in-out infinite; }
+          `}</style>
+
+          <svg
+            width="140"
+            height="140"
+            viewBox="0 0 140 140"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="float-animation cursor-pointer hover:scale-105 transition-transform duration-300"
+          >
+            {/* Sombra suave */}
+            <ellipse cx="70" cy="125" rx="35" ry="8" fill="#8B5CF6" opacity="0.2" />
+
+            {/* Envelope principal com wiggle */}
+            <g className="wiggle-animation" style={{ transformOrigin: '70px 75px' }}>
+              {/* Corpo do envelope */}
+              <rect x="25" y="45" width="90" height="60" rx="8" fill="url(#envelopeGradient)" />
+
+              {/* Aba do envelope */}
+              <path d="M25 53C25 48.5817 28.5817 45 33 45H107C111.418 45 115 48.5817 115 53L70 85L25 53Z" fill="#A78BFA" />
+
+              {/* Linhas internas */}
+              <path d="M30 50L70 78L110 50" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+              <path d="M25 100L50 80" stroke="#6D28D9" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
+              <path d="M115 100L90 80" stroke="#6D28D9" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
+
+              {/* Icone @ no centro */}
+              <circle cx="70" cy="72" r="12" fill="white" opacity="0.9" />
+              <text x="63" y="78" fill="#7C3AED" fontSize="16" fontWeight="bold" fontFamily="system-ui">@</text>
+            </g>
+
+            {/* Estrelas decorativas */}
+            <g opacity="0.6">
+              <circle cx="20" cy="55" r="2" fill="#C4B5FD" />
+              <circle cx="120" cy="60" r="3" fill="#A78BFA" />
+              <circle cx="25" cy="90" r="2" fill="#DDD6FE" />
+              <circle cx="115" cy="95" r="2" fill="#C4B5FD" />
+            </g>
+
+            {/* Gradiente */}
+            <defs>
+              <linearGradient id="envelopeGradient" x1="25" y1="45" x2="115" y2="105" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#8B5CF6" />
+                <stop offset="1" stopColor="#7C3AED" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight text-gray-900">
-          {messageMode === 'identified' ? 'Email Magico' : 'Caixa Secreta'}
+        <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight text-violet-600">
+          {selectedDomain.split('').map((letter, index) => (
+            <span
+              key={index}
+              className="inline-block"
+              style={{
+                transform: `translateY(${index % 2 === 0 ? '-3px' : '3px'}) rotate(${index % 2 === 0 ? '-3deg' : '3deg'})`,
+              }}
+            >
+              {letter}
+            </span>
+          ))}
         </h1>
 
-        <p className="text-xl md:text-2xl text-gray-500 max-w-2xl mx-auto leading-relaxed mb-2">
-          {messageMode === 'identified' ? (
-            <>Crie um email temporario em <span className="text-blue-600 font-semibold">2 segundos</span></>
-          ) : (
-            <>Receba mensagens <span className="text-fuchsia-600 font-semibold">anonimas</span> de qualquer pessoa</>
-          )}
+        <p className="text-xl text-gray-500 max-w-xl mx-auto leading-relaxed">
+          Crie um email temporário + receba mensagens anônimas
         </p>
-        <p className="text-lg text-gray-400">
-          {messageMode === 'identified'
-            ? 'Sem cadastro. Sem senha. Sem frescura.'
-            : 'Compartilhe o link. Receba confissoes.'}
+        <p className="text-base text-gray-400 mt-2">
+          Tudo na mesma caixa. Sem cadastro. Sem senha.
         </p>
       </div>
 
@@ -295,38 +362,20 @@ export default function CreateBoxForm() {
       <div className="bg-white rounded-3xl p-8 border-2 border-gray-100 shadow-xl">
         {/* Preview */}
         <div className="text-center mb-8">
-          <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium mb-4 ${
-            messageMode === 'identified'
-              ? 'bg-blue-100 text-blue-700'
-              : 'bg-fuchsia-100 text-fuchsia-700'
-          }`}>
-            <span className={`w-2 h-2 rounded-full animate-pulse ${
-              messageMode === 'identified' ? 'bg-blue-500' : 'bg-fuchsia-500'
-            }`} />
-            {messageMode === 'identified' ? 'Seu email sera' : 'Seu link sera'}
+          <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium mb-4 bg-violet-100 text-violet-700">
+            <span className="w-2 h-2 rounded-full animate-pulse bg-violet-500" />
+            Seu email será
           </div>
 
-          {messageMode === 'identified' ? (
-            <div className="text-2xl md:text-3xl font-black break-all">
-              <span className="text-blue-600">
-                {customName || '...'}
-              </span>
-              <span className="text-gray-400">@</span>
-              <span className="text-blue-400">
-                {selectedDomain}
-              </span>
-            </div>
-          ) : (
-            <div className="text-2xl md:text-3xl font-black break-all">
-              <span className="text-fuchsia-400">
-                {selectedDomain}
-              </span>
-              <span className="text-gray-400">/</span>
-              <span className="text-fuchsia-600">
-                {customName || '...'}
-              </span>
-            </div>
-          )}
+          <div className="text-2xl md:text-3xl font-black break-all">
+            <span className="text-violet-600">
+              {customName || '...'}
+            </span>
+            <span className="text-gray-400">@</span>
+            <span className="text-violet-400">
+              {selectedDomain}
+            </span>
+          </div>
         </div>
 
         {/* Name Input */}
@@ -338,8 +387,8 @@ export default function CreateBoxForm() {
             <input
               type="text"
               value={customName}
-              onChange={(e) => setCustomName(e.target.value.toLowerCase().replace(/[^a-z0-9]/g, ''))}
-              placeholder="seunome"
+              onChange={(e) => setCustomName(e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, ''))}
+              placeholder="nome.sobrenome"
               maxLength={30}
               className="w-full px-5 py-4 bg-gray-50 rounded-2xl text-lg font-medium text-gray-900 border-2 border-gray-200 focus:border-violet-500 focus:bg-white transition-all outline-none placeholder-gray-400"
             />
@@ -355,7 +404,7 @@ export default function CreateBoxForm() {
                 </span>
               )}
               {!checking && isAvailable === false && (
-                <span className="text-red-500 text-sm font-medium">Indisponivel</span>
+                <span className="text-red-500 text-sm font-medium">Indisponível</span>
               )}
               <button
                 onClick={suggestName}
@@ -372,9 +421,9 @@ export default function CreateBoxForm() {
         </div>
 
         {/* Domain Select */}
-        <div className="mb-6">
+        <div className="mb-8">
           <label className="block text-sm font-semibold text-gray-700 mb-2 text-center">
-            Dominio
+            Domínio
           </label>
           <div className="flex flex-wrap gap-2 justify-center">
             {ALLOWED_DOMAINS.map((domain) => (
@@ -393,67 +442,23 @@ export default function CreateBoxForm() {
           </div>
         </div>
 
-        {/* Message Mode Select */}
-        <div className="mb-8">
-          <label className="block text-sm font-semibold text-gray-700 mb-2 text-center">
-            Tipo de caixa
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() => setMessageMode('identified')}
-              className={`p-4 rounded-2xl text-left transition-all border-2 ${
-                messageMode === 'identified'
-                  ? 'bg-blue-50 border-blue-400'
-                  : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-              }`}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  messageMode === 'identified' ? 'bg-blue-500' : 'bg-gray-200'
-                }`}>
-                  <svg className={`w-5 h-5 ${messageMode === 'identified' ? 'text-white' : 'text-gray-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <span className={`font-semibold ${messageMode === 'identified' ? 'text-blue-700' : 'text-gray-600'}`}>
-                  Email
-                </span>
-              </div>
-              <p className="text-xs text-gray-500 mb-1">
-                Receba emails de sites
-              </p>
-              <p className={`text-xs font-mono ${messageMode === 'identified' ? 'text-blue-600' : 'text-gray-400'}`}>
-                nome@dominio
-              </p>
-            </button>
-
-            <button
-              onClick={() => setMessageMode('anonymous')}
-              className={`p-4 rounded-2xl text-left transition-all border-2 ${
-                messageMode === 'anonymous'
-                  ? 'bg-fuchsia-50 border-fuchsia-400'
-                  : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-              }`}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  messageMode === 'anonymous' ? 'bg-fuchsia-500' : 'bg-gray-200'
-                }`}>
-                  <svg className={`w-5 h-5 ${messageMode === 'anonymous' ? 'text-white' : 'text-gray-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <span className={`font-semibold ${messageMode === 'anonymous' ? 'text-fuchsia-700' : 'text-gray-600'}`}>
-                  Anonimo
-                </span>
-              </div>
-              <p className="text-xs text-gray-500 mb-1">
-                Receba mensagens secretas
-              </p>
-              <p className={`text-xs font-mono ${messageMode === 'anonymous' ? 'text-fuchsia-600' : 'text-gray-400'}`}>
-                dominio/nome
-              </p>
-            </button>
+        {/* Features hint */}
+        <div className="mb-8 grid grid-cols-2 gap-3">
+          <div className="bg-blue-50 rounded-xl p-4 text-center">
+            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <p className="text-xs text-blue-700 font-medium">Recebe emails de sites</p>
+          </div>
+          <div className="bg-fuchsia-50 rounded-xl p-4 text-center">
+            <div className="w-8 h-8 bg-fuchsia-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+              <svg className="w-4 h-4 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-xs text-fuchsia-700 font-medium">Recebe mensagens anônimas</p>
           </div>
         </div>
 
@@ -461,11 +466,7 @@ export default function CreateBoxForm() {
         <button
           onClick={handleCreate}
           disabled={loading || !customName || isAvailable === false}
-          className={`w-full px-8 py-5 text-white text-lg font-bold rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg ${
-            messageMode === 'identified'
-              ? 'bg-blue-500 hover:bg-blue-600 shadow-blue-200'
-              : 'bg-fuchsia-500 hover:bg-fuchsia-600 shadow-fuchsia-200'
-          }`}
+          className="w-full px-8 py-5 text-white text-lg font-bold rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 shadow-violet-200"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">

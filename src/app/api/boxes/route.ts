@@ -8,7 +8,43 @@ import {
   boxExists,
   getBoxMeta,
 } from '@/lib/s3';
-import { isAllowedDomain, Box, MessageMode } from '@/types';
+import { isAllowedDomain, Box } from '@/types';
+
+// Palavras reservadas e sugestivas (nao podem ser usadas como email)
+const RESERVED_WORDS = [
+  // Palavras do sistema
+  'admin', 'administrator', 'root', 'system', 'mail', 'email', 'suporte', 'support',
+  'help', 'ajuda', 'info', 'contact', 'contato', 'webmaster', 'postmaster',
+  'hostmaster', 'abuse', 'noreply', 'no-reply', 'security', 'seguranca',
+  'billing', 'sales', 'marketing', 'legal', 'compliance', 'privacy',
+  'newsletter', 'notification', 'alert', 'daemon', 'mailer', 'ftp', 'www',
+  // Genericas/Placeholders
+  'qualquercoisa', 'qualquer', 'algumacois', 'nada', 'tudo', 'algo',
+  'teste', 'test', 'testing', 'temp', 'temporario', 'temporary', 'tmp',
+  'anonimo', 'anonymous', 'fake', 'falso', 'null', 'undefined', 'void',
+  'exemplo', 'example', 'sample', 'demo', 'default', 'user', 'usuario',
+  'nome', 'name', 'email', 'seunome', 'yourname', 'meunome', 'myname',
+  'asdf', 'qwerty', 'aaa', 'bbb', 'ccc', 'abc', 'xyz', '123', '1234',
+  // Sugestivas/Ofensivas
+  'porra', 'caralho', 'foda', 'fodase', 'buceta', 'pinto', 'cu', 'merda', 'bosta',
+  'puta', 'putaria', 'viado', 'bicha', 'gay', 'lesbica', 'travesti', 'pederasta',
+  'nazista', 'nazi', 'hitler', 'kkk', 'racista', 'fascista', 'supremacist',
+  'sex', 'sexo', 'porn', 'porno', 'xxx', 'nude', 'nudes', 'nsfw', 'adult',
+  'droga', 'drug', 'cocaina', 'maconha', 'crack', 'heroina',
+  // Marcas/Empresas
+  'google', 'facebook', 'instagram', 'twitter', 'meta', 'apple', 'microsoft',
+  'amazon', 'netflix', 'spotify', 'whatsapp', 'telegram', 'discord', 'tiktok',
+  'youtube', 'linkedin', 'snapchat', 'pinterest', 'reddit', 'twitch',
+  'paypal', 'mercadopago', 'nubank', 'itau', 'bradesco', 'santander',
+  // Dominios proprios
+  'porranenhuma', 'xablau', 'biscoito', 'bolacha', 'aquelaursa', 'tuamaeaquelaursa',
+  'uaise', 'sorteador', 'sorteando', 'gerador',
+];
+
+function isReservedWord(slug: string): boolean {
+  const normalized = slug.toLowerCase().replace(/[._]/g, '');
+  return RESERVED_WORDS.some(word => normalized.includes(word));
+}
 
 // POST /api/boxes - Create a new box
 export async function POST(request: NextRequest) {
@@ -16,22 +52,29 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => ({}));
     const domain = body.domain || getDomainFromHeaders(request.headers);
     let slug = body.slug?.toLowerCase().trim();
-    const messageMode: MessageMode = body.messageMode === 'identified' ? 'identified' : 'anonymous';
 
     // Validate domain
     if (!isAllowedDomain(domain)) {
       return NextResponse.json(
-        { error: 'Domínio não permitido' },
+        { error: 'Dominio nao permitido' },
         { status: 400 }
       );
     }
 
     // If custom slug provided, validate it
     if (slug) {
-      const slugRegex = /^[a-z0-9]{3,30}$/;
+      const slugRegex = /^[a-z0-9._]{3,30}$/;
       if (!slugRegex.test(slug)) {
         return NextResponse.json(
-          { error: 'Nome deve ter entre 3-30 caracteres (apenas letras minúsculas e números)' },
+          { error: 'Nome deve ter entre 3-30 caracteres (letras, numeros, ponto e underline)' },
+          { status: 400 }
+        );
+      }
+
+      // Check reserved words
+      if (isReservedWord(slug)) {
+        return NextResponse.json(
+          { error: 'Este nome nao pode ser usado. Escolha outro.' },
           { status: 400 }
         );
       }
@@ -39,7 +82,7 @@ export async function POST(request: NextRequest) {
       // Check if already exists
       if (await boxExists(domain, slug)) {
         return NextResponse.json(
-          { error: 'Este nome já está em uso. Escolha outro.' },
+          { error: 'Este nome ja esta em uso. Escolha outro.' },
           { status: 409 }
         );
       }
@@ -67,7 +110,6 @@ export async function POST(request: NextRequest) {
       slug,
       domain,
       token,
-      messageMode,
       createdAt: now,
     };
 
@@ -91,7 +133,6 @@ export async function POST(request: NextRequest) {
       slug,
       domain,
       token,
-      messageMode,
       publicUrl: `${baseUrl}/${slug}`,
       inboxUrl: `${baseUrl}/inbox/${token}`,
       email: `${slug}@${domain}`,

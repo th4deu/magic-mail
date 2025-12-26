@@ -1,50 +1,48 @@
 import { v4 as uuidv4 } from 'uuid';
 
-// Lista de adjetivos em português - mais naturais e semânticos
-const ADJECTIVES = [
-  // Cores
-  'azul', 'verde', 'vermelho', 'amarelo', 'roxo', 'laranja', 'rosa', 'dourado', 'prateado',
-  // Natureza
-  'solar', 'lunar', 'estelar', 'tropical', 'polar', 'oceano', 'floresta', 'montanha',
-  // Sentimentos positivos
-  'feliz', 'alegre', 'sereno', 'calmo', 'tranquilo', 'gentil', 'doce',
-  // Características
-  'rapido', 'veloz', 'agil', 'forte', 'bravo', 'esperto', 'sabio',
-  // Clima/Tempo
-  'quente', 'frio', 'fresco', 'morno',
-  // Épocas
-  'outono', 'verao', 'inverno', 'primavera',
-  // Mistério
-  'secreto', 'oculto', 'misterioso', 'magico', 'encantado',
+// Nomes brasileiros comuns
+const FIRST_NAMES = [
+  // Masculinos
+  'joao', 'pedro', 'lucas', 'mateus', 'gabriel', 'rafael', 'bruno', 'diego',
+  'thiago', 'andre', 'felipe', 'rodrigo', 'carlos', 'marcos', 'paulo', 'daniel',
+  'leonardo', 'gustavo', 'henrique', 'victor', 'eduardo', 'marcelo', 'ricardo', 'fernando',
+  'antonio', 'jose', 'luiz', 'sergio', 'fabio', 'alex', 'caio', 'vinicius',
+  'guilherme', 'leandro', 'renato', 'claudio', 'roberto', 'miguel', 'arthur', 'bernardo',
+  // Femininos
+  'maria', 'ana', 'julia', 'beatriz', 'larissa', 'fernanda', 'camila', 'amanda',
+  'patricia', 'carolina', 'mariana', 'leticia', 'gabriela', 'bruna', 'jessica', 'aline',
+  'vanessa', 'natalia', 'rafaela', 'daniela', 'priscila', 'tatiana', 'isabela', 'renata',
+  'carla', 'claudia', 'sandra', 'lucia', 'helena', 'sofia', 'valentina', 'alice',
+  'laura', 'livia', 'bianca', 'vitoria', 'lorena', 'luiza', 'thais', 'monique',
 ];
 
-// Lista de substantivos em português - mais naturais e semânticos
-const NOUNS = [
-  // Animais comuns
-  'gato', 'cachorro', 'passaro', 'peixe', 'coruja', 'aguia', 'falcao',
-  'lobo', 'raposa', 'urso', 'tigre', 'leao', 'pantera', 'jaguar',
-  'coelho', 'esquilo', 'castor', 'lontra', 'foca', 'golfinho', 'baleia',
-  'pato', 'cisne', 'flamingo', 'tucano', 'arara', 'papagaio', 'beija',
-  // Natureza
-  'rio', 'lago', 'mar', 'oceano', 'cachoeira', 'fonte', 'nascente',
-  'floresta', 'bosque', 'jardim', 'prado', 'vale', 'colina', 'montanha',
-  'nuvem', 'vento', 'brisa', 'tempestade', 'trovao', 'raio', 'aurora',
-  'estrela', 'lua', 'sol', 'cometa', 'galaxia', 'nebulosa', 'constelacao',
-  // Elementos
-  'fogo', 'agua', 'terra', 'ar', 'cristal', 'diamante', 'rubi', 'safira',
-  // Plantas
-  'rosa', 'lirio', 'tulipa', 'orquidea', 'girassol', 'margarida', 'violeta',
-  'carvalho', 'cedro', 'pinheiro', 'bamboo', 'sequoia', 'oliveira',
-  // Fantasia
-  'dragao', 'fenix', 'unicornio', 'grifo', 'sereia', 'fada', 'elfo',
+// Sobrenomes brasileiros comuns
+const LAST_NAMES = [
+  'silva', 'santos', 'oliveira', 'souza', 'rodrigues', 'ferreira', 'alves', 'pereira',
+  'lima', 'gomes', 'costa', 'ribeiro', 'martins', 'carvalho', 'almeida', 'lopes',
+  'soares', 'fernandes', 'vieira', 'barbosa', 'rocha', 'dias', 'nascimento', 'andrade',
+  'moreira', 'nunes', 'marques', 'machado', 'mendes', 'freitas', 'cardoso', 'ramos',
+  'goncalves', 'santana', 'teixeira', 'araujo', 'pinto', 'correia', 'campos', 'cunha',
+  'azevedo', 'melo', 'monteiro', 'castro', 'miranda', 'moura', 'batista', 'borges',
 ];
 
-// Generate a fun, memorable username (Portuguese style: noun + adjective)
+// Generate a realistic email username (nome.sobrenome or nome.sobrenome123)
 export function generateUsername(): string {
-  const adjective = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
-  const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
-  const number = Math.floor(Math.random() * 100);
-  return `${noun}${adjective}${number}`;
+  const firstName = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)];
+  const lastName = LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)];
+
+  // 50% chance de adicionar numero
+  const addNumber = Math.random() > 0.5;
+  const number = addNumber ? Math.floor(Math.random() * 99) + 1 : '';
+
+  // Formatos varidos: nome.sobrenome, nomesobrenome, nome_sobrenome
+  const formats = [
+    `${firstName}.${lastName}${number}`,
+    `${firstName}${lastName}${number}`,
+    `${firstName}_${lastName}${number}`,
+  ];
+
+  return formats[Math.floor(Math.random() * formats.length)];
 }
 
 // Generate a short, memorable slug (6 characters)
@@ -91,10 +89,10 @@ export function getDomainFromHeaders(headers: Headers): string {
 // Validate message content
 export function validateMessageContent(content: string): { valid: boolean; error?: string } {
   if (!content || content.trim().length === 0) {
-    return { valid: false, error: 'Mensagem não pode estar vazia' };
+    return { valid: false, error: 'Mensagem nao pode estar vazia' };
   }
   if (content.length > 5000) {
-    return { valid: false, error: 'Mensagem muito longa (máximo 5000 caracteres)' };
+    return { valid: false, error: 'Mensagem muito longa (maximo 5000 caracteres)' };
   }
   return { valid: true };
 }

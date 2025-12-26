@@ -1,12 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageMode } from '@/types';
 
 interface SendMessageFormProps {
   slug: string;
   domain: string;
-  messageMode: MessageMode;
 }
 
 export default function SendMessageForm({ slug, domain }: SendMessageFormProps) {

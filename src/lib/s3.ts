@@ -9,14 +9,31 @@ import { Box, Message, BoxesIndex, TokenLookup } from '@/types';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Check if AWS is configured
+// Check if R2 (Cloudflare) is configured
+const isR2Configured = !!(
+  process.env.R2_ACCESS_KEY_ID &&
+  process.env.R2_SECRET_ACCESS_KEY &&
+  process.env.R2_ACCOUNT_ID
+);
+
+// Check if AWS S3 is configured
 const isAwsConfigured = !!(
   process.env.AWS_ACCESS_KEY_ID &&
   process.env.AWS_SECRET_ACCESS_KEY &&
   process.env.AWS_S3_BUCKET
 );
 
-const s3Client = isAwsConfigured
+// Prioriza R2, depois AWS, depois storage local
+const s3Client = isR2Configured
+  ? new S3Client({
+      region: 'auto',
+      endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+      credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
+      },
+    })
+  : isAwsConfigured
   ? new S3Client({
       region: process.env.AWS_REGION || 'us-east-1',
       credentials: {
@@ -26,7 +43,7 @@ const s3Client = isAwsConfigured
     })
   : null;
 
-const BUCKET = process.env.AWS_S3_BUCKET || 'tempemails';
+const BUCKET = process.env.R2_BUCKET || process.env.AWS_S3_BUCKET || 'magic-mails-inboxes';
 
 // File-based storage for development (when S3 is not configured)
 const DEV_STORAGE_DIR = path.join(process.cwd(), '.dev-storage');
