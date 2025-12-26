@@ -35,6 +35,17 @@ export default function CreateBoxForm() {
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [checking, setChecking] = useState(false);
 
+  // Detectar dominio atual da URL e selecionar automaticamente
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const currentHost = window.location.hostname;
+      const matchedDomain = ALLOWED_DOMAINS.find(domain => currentHost === domain || currentHost.endsWith('.' + domain));
+      if (matchedDomain) {
+        setSelectedDomain(matchedDomain);
+      }
+    }
+  }, []);
+
   const suggestName = useCallback(async () => {
     setSuggesting(true);
     try {
