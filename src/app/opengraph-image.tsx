@@ -1,4 +1,6 @@
 import { ImageResponse } from 'next/og';
+import { headers } from 'next/headers';
+import { ALLOWED_DOMAINS } from '@/types';
 
 export const runtime = 'edge';
 
@@ -10,6 +12,10 @@ export const size = {
 export const contentType = 'image/png';
 
 export default async function Image() {
+  const headersList = await headers();
+  const host = headersList.get('host') || '';
+  const domain = ALLOWED_DOMAINS.find(d => host.includes(d)) || 'porranenhuma.com';
+
   return new ImageResponse(
     (
       <div
@@ -46,37 +52,39 @@ export default async function Image() {
           </svg>
         </div>
 
-        {/* Title */}
+        {/* Domain */}
         <div
           style={{
-            fontSize: 72,
+            fontSize: 64,
             fontWeight: 900,
             color: 'white',
-            marginBottom: 20,
+            marginBottom: 16,
             textAlign: 'center',
             textShadow: '0 4px 20px rgba(0,0,0,0.3)',
           }}
         >
-          Email Temporario
+          {domain}
         </div>
 
-        {/* Subtitle */}
+        {/* Title */}
         <div
           style={{
-            fontSize: 32,
-            color: 'rgba(255,255,255,0.9)',
-            marginBottom: 40,
+            fontSize: 36,
+            fontWeight: 700,
+            color: 'rgba(255,255,255,0.95)',
+            marginBottom: 12,
             textAlign: 'center',
           }}
         >
-          + Mensagens Anonimas
+          Email Temporario + Mensagens Anonimas
         </div>
 
         {/* Features */}
         <div
           style={{
             display: 'flex',
-            gap: 40,
+            gap: 30,
+            marginTop: 30,
           }}
         >
           <div
@@ -88,7 +96,7 @@ export default async function Image() {
               padding: '12px 24px',
               borderRadius: 50,
               color: 'white',
-              fontSize: 24,
+              fontSize: 22,
             }}
           >
             Gratis
@@ -102,7 +110,7 @@ export default async function Image() {
               padding: '12px 24px',
               borderRadius: 50,
               color: 'white',
-              fontSize: 24,
+              fontSize: 22,
             }}
           >
             Sem Cadastro
@@ -116,7 +124,7 @@ export default async function Image() {
               padding: '12px 24px',
               borderRadius: 50,
               color: 'white',
-              fontSize: 24,
+              fontSize: 22,
             }}
           >
             100% Privado

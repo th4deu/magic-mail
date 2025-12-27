@@ -1,4 +1,6 @@
 import { ImageResponse } from 'next/og';
+import { headers } from 'next/headers';
+import { ALLOWED_DOMAINS } from '@/types';
 
 export const runtime = 'edge';
 
@@ -10,6 +12,10 @@ export const size = {
 export const contentType = 'image/png';
 
 export default async function Image() {
+  const headersList = await headers();
+  const host = headersList.get('host') || '';
+  const domain = ALLOWED_DOMAINS.find(d => host.includes(d)) || 'porranenhuma.com';
+
   return new ImageResponse(
     (
       <div
@@ -46,30 +52,30 @@ export default async function Image() {
           </svg>
         </div>
 
-        {/* Title */}
+        {/* Domain */}
         <div
           style={{
-            fontSize: 64,
+            fontSize: 56,
             fontWeight: 900,
             color: 'white',
-            marginBottom: 16,
+            marginBottom: 12,
             textAlign: 'center',
             textShadow: '0 4px 20px rgba(0,0,0,0.3)',
           }}
         >
-          Email Temporario
+          {domain}
         </div>
 
         {/* Subtitle */}
         <div
           style={{
-            fontSize: 28,
+            fontSize: 26,
             color: 'rgba(255,255,255,0.9)',
             marginBottom: 30,
             textAlign: 'center',
           }}
         >
-          + Mensagens Anonimas | Gratis | Sem Cadastro
+          Email Temporario + Mensagens Anonimas | Gratis | Sem Cadastro
         </div>
       </div>
     ),
