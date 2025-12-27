@@ -303,38 +303,80 @@ export default function Home() {
         <div className="container mx-auto px-4 py-12">
           {/* Other Products */}
           <div className="text-center mb-8">
-            <p className="text-sm text-gray-500 mb-4">Outros produtos</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a href="https://sorteador.com.br" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+            <p className="text-sm text-gray-500 mb-6">Conheça nossos outros produtos</p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a
+                href="https://sorteador.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gray-50 hover:bg-violet-50 rounded-full text-gray-600 hover:text-violet-600 transition-all text-sm font-medium border border-gray-200 hover:border-violet-200"
+              >
                 Sorteador
               </a>
-              <span className="text-gray-300">•</span>
-              <a href="https://sorteando.com.br" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+              <a
+                href="https://sorteando.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gray-50 hover:bg-pink-50 rounded-full text-gray-600 hover:text-pink-600 transition-all text-sm font-medium border border-gray-200 hover:border-pink-200"
+              >
                 Sorteando
               </a>
-              <span className="text-gray-300">•</span>
-              <a href="https://gerador.de" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+              <a
+                href="https://gerador.de"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gray-50 hover:bg-cyan-50 rounded-full text-gray-600 hover:text-cyan-600 transition-all text-sm font-medium border border-gray-200 hover:border-cyan-200"
+              >
                 Gerador.de
               </a>
-              <span className="text-gray-300">•</span>
-              <a href="https://simplesmente.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+              <a
+                href="https://simplesmente.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gray-50 hover:bg-emerald-50 rounded-full text-gray-600 hover:text-emerald-600 transition-all text-sm font-medium border border-gray-200 hover:border-emerald-200"
+              >
                 Simplesmente
               </a>
-              <span className="text-gray-300">•</span>
-              <a href="https://amigosecreto.com.br" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+              <a
+                href="https://amigosecreto.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gray-50 hover:bg-amber-50 rounded-full text-gray-600 hover:text-amber-600 transition-all text-sm font-medium border border-gray-200 hover:border-amber-200"
+              >
                 Amigo Secreto
               </a>
             </div>
           </div>
 
-          {/* Developed by */}
-          <div className="text-center pt-6 border-t border-gray-100">
-            <p className="text-gray-400 text-sm">
-              Desenvolvido por{' '}
-              <a href="https://uaise.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors font-semibold">
-                UAISE.com
-              </a>
-            </p>
+          {/* Logo */}
+          <div className="flex items-center justify-center pt-6 border-t border-gray-100">
+            <a href="https://uaise.com" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-80 transition-opacity">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 25 380 140" className="h-6" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#374151"/>
+                    <stop offset="100%" stopColor="#4b5563"/>
+                  </linearGradient>
+                </defs>
+                <g fill="url(#logoGradient)">
+                  <g transform="translate(5.820622, 158.005855)">
+                    <path d="M 96.46875 -130.796875 C 97.550781 -130.796875 98.09375 -130.304688 98.09375 -129.328125 L 98.09375 -43.65625 C 98.09375 -34.5 95.941406 -26.648438 91.640625 -20.109375 C 87.335938 -13.566406 81.476562 -8.578125 74.0625 -5.140625 C 66.65625 -1.710938 58.316406 0 49.046875 0 C 40.109375 0 31.90625 -1.769531 24.4375 -5.3125 C 16.976562 -8.851562 11.039062 -13.894531 6.625 -20.4375 C 2.207031 -26.976562 0 -34.71875 0 -43.65625 L 0 -107.09375 L 24.6875 -107.09375 L 24.6875 -43.8125 C 25.445312 -37.382812 28.195312 -32.476562 32.9375 -29.09375 C 37.6875 -25.71875 43.054688 -24.03125 49.046875 -24.03125 C 53.191406 -24.03125 57.113281 -24.738281 60.8125 -26.15625 C 64.519531 -27.570312 67.546875 -29.75 69.890625 -32.6875 C 72.234375 -35.632812 73.40625 -39.289062 73.40625 -43.65625 L 73.40625 -129.328125 C 73.40625 -130.304688 74.003906 -130.796875 75.203125 -130.796875 Z"/>
+                  </g>
+                  <g transform="translate(94.258477, 158.005855)">
+                    <path d="M 102.671875 -1.96875 C 102.890625 -1.53125 102.835938 -1.09375 102.515625 -0.65625 C 102.191406 -0.21875 101.753906 0 101.203125 0 L 78.640625 0 C 77.878906 0 77.390625 -0.328125 77.171875 -0.984375 L 51.34375 -73.90625 L 25.828125 -0.984375 C 25.722656 -0.328125 25.179688 0 24.203125 0 L 1.796875 0 C 1.035156 0 0.519531 -0.21875 0.25 -0.65625 C -0.0195312 -1.09375 -0.0507812 -1.53125 0.15625 -1.96875 L 49.703125 -129.8125 C 49.921875 -130.46875 50.460938 -130.796875 51.328125 -130.796875 C 52.203125 -130.796875 52.75 -130.46875 52.96875 -129.8125 Z"/>
+                  </g>
+                  <g transform="translate(187.6006, 158.005855)">
+                    <path d="M 53.296875 -22.40625 C 54.492188 -22.40625 55.09375 -21.910156 55.09375 -20.921875 L 55.09375 -1.46875 C 55.09375 -0.488281 54.492188 0 53.296875 0 L 1.796875 0 C 0.597656 0 0 -0.488281 0 -1.46875 L 0 -20.921875 C 0 -21.910156 0.597656 -22.40625 1.796875 -22.40625 L 15.203125 -22.40625 L 15.203125 -130.796875 L 40.21875 -130.796875 L 40.21875 -22.40625 Z"/>
+                  </g>
+                  <g transform="translate(242.848481, 133.873911)">
+                    <path d="M 49.078125 -59.375 C 54.691406 -56.789062 58.988281 -53.023438 61.96875 -48.078125 C 64.957031 -43.128906 66.453125 -37.488281 66.453125 -31.15625 C 66.453125 -24.46875 64.867188 -18.804688 61.703125 -14.171875 C 58.546875 -9.535156 54.445312 -6.015625 49.40625 -3.609375 C 44.375 -1.203125 39.003906 0 33.296875 0 C 33.296875 0 33.25 0 33.15625 0 L 33.15625 -19.25 C 33.25 -19.25 33.296875 -19.25 33.296875 -19.25 C 36.859375 -19.25 39.976562 -20.34375 42.65625 -22.53125 C 45.332031 -24.71875 46.671875 -27.59375 46.671875 -31.15625 C 46.671875 -33.832031 45.976562 -36.101562 44.59375 -37.96875 C 43.207031 -39.84375 41.488281 -41.316406 39.4375 -42.390625 C 37.394531 -43.460938 35.347656 -44.039062 33.296875 -44.125 C 32.847656 -44.125 31.0625 -44.28125 27.9375 -44.59375 C 24.820312 -44.90625 21.304688 -45.953125 17.390625 -47.734375 C 11.859375 -50.316406 7.578125 -53.90625 4.546875 -58.5 C 1.515625 -63.09375 0 -68.507812 0 -74.75 C 0 -81.4375 1.582031 -87.1875 4.75 -92 C 7.914062 -96.8125 12.035156 -100.507812 17.109375 -103.09375 C 22.191406 -105.675781 27.585938 -106.96875 33.296875 -106.96875 C 39.441406 -106.96875 44.96875 -105.695312 49.875 -103.15625 C 54.78125 -100.625 58.679688 -97.0625 61.578125 -92.46875 C 64.472656 -87.875 65.96875 -82.546875 66.0625 -76.484375 C 66.144531 -76.304688 66.03125 -76.082031 65.71875 -75.8125 C 65.40625 -75.550781 65.03125 -75.421875 64.59375 -75.421875 L 47.875 -75.421875 C 47.519531 -75.421875 47.1875 -75.550781 46.875 -75.8125 C 46.5625 -76.082031 46.40625 -76.304688 46.40625 -76.484375 C 46.3125 -80.316406 44.972656 -83.144531 42.390625 -84.96875 C 39.804688 -86.800781 36.773438 -87.71875 33.296875 -87.71875 C 29.640625 -87.71875 26.492188 -86.625 23.859375 -84.4375 C 21.234375 -82.257812 19.921875 -79.03125 19.921875 -74.75 C 19.921875 -70.914062 21.300781 -67.992188 24.0625 -65.984375 C 26.832031 -63.984375 29.910156 -62.984375 33.296875 -62.984375 C 33.566406 -62.984375 34.457031 -62.9375 35.96875 -62.84375 C 37.488281 -62.757812 39.425781 -62.472656 41.78125 -61.984375 C 44.144531 -61.492188 46.578125 -60.625 49.078125 -59.375 Z"/>
+                  </g>
+                  <g transform="translate(300.737301, 133.873911)">
+                    <path d="M 50.8125 -19.921875 L 50.8125 0 L 1.46875 0 C 0.488281 0 0 -0.398438 0 -1.203125 L 0 -105.765625 C 0 -106.566406 0.488281 -106.96875 1.46875 -106.96875 L 50.8125 -106.96875 L 50.8125 -87.578125 L 20.453125 -87.578125 L 20.453125 -63.375 L 62.453125 -63.375 C 63.429688 -63.375 63.921875 -62.972656 63.921875 -62.171875 L 63.921875 -45.203125 C 63.921875 -44.398438 63.429688 -44 62.453125 -44 L 20.453125 -44 L 20.453125 -19.921875 Z"/>
+                  </g>
+                </g>
+              </svg>
+            </a>
           </div>
         </div>
       </footer>
