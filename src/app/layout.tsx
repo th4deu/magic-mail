@@ -77,7 +77,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: `Crie um email temporario gratis em ${domain}. Receba emails sem spam. Mensagens anonimas sem cadastro.`,
       images: [
         {
-          url: `${baseUrl}/opengraph-image`,
+          url: `${baseUrl}/og-image.png`,
           width: 1200,
           height: 630,
           alt: `${domain} - Email Temporario e Mensagens Anonimas`,
@@ -88,7 +88,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: `Email Temporario Gratis - ${domain}`,
       description: `Crie um email temporario gratis em ${domain}. Receba emails sem spam. Mensagens anonimas sem cadastro.`,
-      images: [`${baseUrl}/twitter-image`],
+      images: [`${baseUrl}/og-image.png`],
       creator: '@uaborei',
     },
     alternates: {
