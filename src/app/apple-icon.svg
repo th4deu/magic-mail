@@ -1,0 +1,14 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="180" height="180" rx="40" fill="#8B5CF6"/>
+
+  <!-- Envelope body -->
+  <rect x="30" y="55" width="120" height="80" rx="8" fill="white"/>
+
+  <!-- Envelope flap lines -->
+  <path d="M30 65L90 105L150 65" stroke="#8B5CF6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bottom fold lines -->
+  <path d="M30 125L55 105" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+  <path d="M150 125L125 105" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+</svg>

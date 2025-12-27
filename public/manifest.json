@@ -1,0 +1,27 @@
+{
+  "name": "Email Temporario - Mensagens Anonimas",
+  "short_name": "Email Temp",
+  "description": "Crie um email temporario gratis em segundos. Receba emails sem spam. Mensagens anonimas sem cadastro.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#8B5CF6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "apple touch icon"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}
