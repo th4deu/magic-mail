@@ -53,7 +53,7 @@ export default function SendMessageForm({ slug, domain }: SendMessageFormProps) 
             Mensagem enviada!
           </h2>
           <p className="text-gray-600 mb-6">
-            Sua mensagem anonima foi entregue com sucesso.
+            Sua mensagem anônima foi entregue com sucesso.
           </p>
           <button
             onClick={() => setSuccess(false)}
@@ -86,7 +86,7 @@ export default function SendMessageForm({ slug, domain }: SendMessageFormProps) 
             id="message"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Escreva aqui o que voce quer dizer..."
+            placeholder="Escreva aqui o que você quer dizer..."
             rows={6}
             maxLength={5000}
             required
@@ -94,7 +94,7 @@ export default function SendMessageForm({ slug, domain }: SendMessageFormProps) 
           />
           <div className="flex justify-between items-center mt-2">
             <p className="text-xs text-gray-400">
-              Sua identidade esta protegida
+              Sua identidade está protegida
             </p>
             <span className={`text-xs ${content.length > 4500 ? 'text-amber-500' : 'text-gray-400'}`}>
               {content.length}/5000
@@ -129,7 +129,7 @@ export default function SendMessageForm({ slug, domain }: SendMessageFormProps) 
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          Mensagem 100% anonima
+          Mensagem 100% anônima
         </span>
       </div>
     </form>

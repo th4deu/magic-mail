@@ -91,7 +91,7 @@ export default function MessageList({ token }: MessageListProps) {
   };
 
   const handleDeleteBox = async () => {
-    if (!confirm('Tem certeza que deseja deletar esta caixa e todas as mensagens? Esta acao nao pode ser desfeita.')) {
+    if (!confirm('Tem certeza que deseja deletar esta caixa e todas as mensagens? Esta ação não pode ser desfeita.')) {
       return;
     }
 
@@ -129,7 +129,7 @@ export default function MessageList({ token }: MessageListProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 className="font-semibold text-red-800 mb-2">Nao foi possivel carregar</h2>
+          <h2 className="font-semibold text-red-800 mb-2">Não foi possível carregar</h2>
           <p className="text-red-600 text-sm">{error}</p>
         </div>
       </div>
@@ -189,7 +189,7 @@ export default function MessageList({ token }: MessageListProps) {
         <div className="space-y-3">
           {/* Email */}
           <div className="bg-blue-50 rounded-xl p-3 border border-blue-100">
-            <p className="text-xs text-blue-600 mb-2 font-medium">Seu email temporario</p>
+            <p className="text-xs text-blue-600 mb-2 font-medium">Seu email temporário</p>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -212,7 +212,7 @@ export default function MessageList({ token }: MessageListProps) {
 
           {/* Public Link */}
           <div className="bg-fuchsia-50 rounded-xl p-3 border border-fuchsia-100">
-            <p className="text-xs text-fuchsia-600 mb-2 font-medium">Link para mensagens anonimas</p>
+            <p className="text-xs text-fuchsia-600 mb-2 font-medium">Link para mensagens anônimas</p>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -247,7 +247,7 @@ export default function MessageList({ token }: MessageListProps) {
             Nenhuma mensagem ainda
           </h2>
           <p className="text-gray-500 mb-6">
-            Use o email para cadastros em sites ou compartilhe o link para receber mensagens anonimas.
+            Use o email para cadastros em sites ou compartilhe o link para receber mensagens anônimas.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <button
@@ -297,7 +297,7 @@ export default function MessageList({ token }: MessageListProps) {
           )}
           {lastUpdate && (
             <span className="text-gray-400">
-              · Ultima atualizacao: {lastUpdate.toLocaleTimeString('pt-BR')}
+              · Última atualização: {lastUpdate.toLocaleTimeString('pt-BR')}
             </span>
           )}
         </div>

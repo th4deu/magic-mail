@@ -10,7 +10,7 @@ import {
 } from '@/lib/s3';
 import { isAllowedDomain, Box } from '@/types';
 
-// Palavras reservadas e sugestivas (nao podem ser usadas como email)
+// Palavras reservadas e sugestivas (não podem ser usadas como email)
 const RESERVED_WORDS = [
   // Palavras do sistema
   'admin', 'administrator', 'root', 'system', 'mail', 'email', 'suporte', 'support',
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     // Validate domain
     if (!isAllowedDomain(domain)) {
       return NextResponse.json(
-        { error: 'Dominio nao permitido' },
+        { error: 'Domínio não permitido' },
         { status: 400 }
       );
     }
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
       const slugRegex = /^[a-z0-9._]{3,30}$/;
       if (!slugRegex.test(slug)) {
         return NextResponse.json(
-          { error: 'Nome deve ter entre 3-30 caracteres (letras, numeros, ponto e underline)' },
+          { error: 'Nome deve ter entre 3-30 caracteres (letras, números, ponto e underline)' },
           { status: 400 }
         );
       }
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       // Check reserved words
       if (isReservedWord(slug)) {
         return NextResponse.json(
-          { error: 'Este nome nao pode ser usado. Escolha outro.' },
+          { error: 'Este nome não pode ser usado. Escolha outro.' },
           { status: 400 }
         );
       }
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       // Check if already exists
       if (await boxExists(domain, slug)) {
         return NextResponse.json(
-          { error: 'Este nome ja esta em uso. Escolha outro.' },
+          { error: 'Este nome já está em uso. Escolha outro.' },
           { status: 409 }
         );
       }
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
     const host = request.headers.get('host') || '';
     const isLocalhost = host.includes('localhost');
     const protocol = isLocalhost ? 'http' : 'https';
-    // Em localhost, usa o host local; em producao, usa o dominio selecionado
+    // Em localhost, usa o host local; em produção, usa o domínio selecionado
     const baseUrl = isLocalhost ? `${protocol}://${host}` : `${protocol}://${domain}`;
 
     return NextResponse.json({

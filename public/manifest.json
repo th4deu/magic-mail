@@ -1,7 +1,7 @@
 {
-  "name": "Email Temporario - Mensagens Anonimas",
+  "name": "Email Temporário - Mensagens Anônimas",
   "short_name": "Email Temp",
-  "description": "Crie um email temporario gratis em segundos. Receba emails sem spam. Mensagens anonimas sem cadastro.",
+  "description": "Crie um email temporário grátis em segundos. Receba emails sem spam. Mensagens anônimas sem cadastro.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f9fafb",

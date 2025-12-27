@@ -31,11 +31,11 @@ export function generateUsername(): string {
   const firstName = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)];
   const lastName = LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)];
 
-  // 50% chance de adicionar numero
+  // 50% chance de adicionar número
   const addNumber = Math.random() > 0.5;
   const number = addNumber ? Math.floor(Math.random() * 99) + 1 : '';
 
-  // Formatos varidos: nome.sobrenome, nomesobrenome, nome_sobrenome
+  // Formatos variados: nome.sobrenome, nomesobrenome, nome_sobrenome
   const formats = [
     `${firstName}.${lastName}${number}`,
     `${firstName}${lastName}${number}`,
@@ -89,10 +89,10 @@ export function getDomainFromHeaders(headers: Headers): string {
 // Validate message content
 export function validateMessageContent(content: string): { valid: boolean; error?: string } {
   if (!content || content.trim().length === 0) {
-    return { valid: false, error: 'Mensagem nao pode estar vazia' };
+    return { valid: false, error: 'Mensagem não pode estar vazia' };
   }
   if (content.length > 5000) {
-    return { valid: false, error: 'Mensagem muito longa (maximo 5000 caracteres)' };
+    return { valid: false, error: 'Mensagem muito longa (máximo 5000 caracteres)' };
   }
   return { valid: true };
 }

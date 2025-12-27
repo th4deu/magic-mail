@@ -60,18 +60,18 @@ export default async function SendMessagePage({ params, searchParams }: PageProp
           </div>
 
           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-            Envie uma mensagem <span className="text-fuchsia-600">anonima</span>
+            Envie uma mensagem <span className="text-fuchsia-600">anônima</span>
           </h1>
 
           <p className="text-lg text-gray-600 max-w-xl mx-auto mb-4">
-            Escreva o que voce quiser. A pessoa que criou esta caixa nao vai saber quem mandou.
+            Escreva o que você quiser. A pessoa que criou esta caixa não vai saber quem mandou.
           </p>
 
           <div className="inline-flex items-center gap-2 bg-white rounded-full px-5 py-2 shadow-sm border-2 border-gray-100">
             <svg className="w-4 h-4 text-fuchsia-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span className="text-sm font-medium text-gray-700">Mensagem anonima para {box.slug}</span>
+            <span className="text-sm font-medium text-gray-700">Mensagem anônima para {box.slug}</span>
           </div>
         </div>
 
@@ -86,7 +86,7 @@ export default async function SendMessagePage({ params, searchParams }: PageProp
               </svg>
             </div>
             <div className="text-left">
-              <p className="text-sm text-blue-700 font-medium">Tambem aceita emails</p>
+              <p className="text-sm text-blue-700 font-medium">Também aceita emails</p>
               <p className="text-xs text-blue-600 font-mono">{box.slug}@{box.domain}</p>
             </div>
           </div>
@@ -96,8 +96,8 @@ export default async function SendMessagePage({ params, searchParams }: PageProp
         <div className="mt-12 text-center">
           <div className="inline-flex items-center gap-6 bg-white rounded-2xl px-8 py-5 shadow-sm border-2 border-gray-100">
             <div className="text-left">
-              <p className="text-sm text-gray-500">Quer receber mensagens tambem?</p>
-              <p className="font-semibold text-gray-900">Crie sua propria caixa</p>
+              <p className="text-sm text-gray-500">Quer receber mensagens também?</p>
+              <p className="font-semibold text-gray-900">Crie sua própria caixa</p>
             </div>
             <a
               href="/"
@@ -117,6 +117,6 @@ export async function generateMetadata({ params }: PageProps) {
 
   return {
     title: `Enviar mensagem para ${slug}`,
-    description: 'Envie uma mensagem anonima de forma segura e privada.',
+    description: 'Envie uma mensagem anônima de forma segura e privada.',
   };
 }

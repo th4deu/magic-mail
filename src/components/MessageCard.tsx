@@ -102,7 +102,7 @@ export default function MessageCard({ message, token, onUpdate }: MessageCardPro
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Anonimo
+                Anônimo
               </span>
             )}
             {!message.isRead && (
@@ -176,7 +176,7 @@ export default function MessageCard({ message, token, onUpdate }: MessageCardPro
                   ? 'text-blue-600 hover:text-blue-700 hover:bg-blue-100'
                   : 'text-fuchsia-600 hover:text-fuchsia-700 hover:bg-fuchsia-100'
             }`}
-            title={message.isRead ? 'Marcar como nao lido' : 'Marcar como lido'}
+            title={message.isRead ? 'Marcar como não lido' : 'Marcar como lido'}
           >
             {loading ? (
               <div className={`w-5 h-5 border-2 border-gray-300 rounded-full animate-spin ${
@@ -230,7 +230,7 @@ export default function MessageCard({ message, token, onUpdate }: MessageCardPro
 
             {/* Description */}
             <p className="text-gray-500 text-center mb-6">
-              Essa acao nao pode ser desfeita. {isEmail ? 'O email sera removido' : 'A mensagem sera removida'} permanentemente.
+              Essa ação não pode ser desfeita. {isEmail ? 'O email será removido' : 'A mensagem será removida'} permanentemente.
             </p>
 
             {/* Message Preview */}

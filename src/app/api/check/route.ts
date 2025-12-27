@@ -47,14 +47,14 @@ export async function GET(request: NextRequest) {
 
     if (!slug) {
       return NextResponse.json(
-        { error: 'Slug e obrigatorio' },
+        { error: 'Slug é obrigatório' },
         { status: 400 }
       );
     }
 
     if (!domain || !isAllowedDomain(domain)) {
       return NextResponse.json(
-        { error: 'Dominio invalido' },
+        { error: 'Domínio inválido' },
         { status: 400 }
       );
     }
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     if (!slugRegex.test(slug)) {
       return NextResponse.json({
         available: false,
-        error: 'Nome deve ter entre 3-30 caracteres (letras, numeros, ponto e underline)',
+        error: 'Nome deve ter entre 3-30 caracteres (letras, números, ponto e underline)',
       });
     }
 
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
     if (isReservedWord(slug)) {
       return NextResponse.json({
         available: false,
-        error: 'Este nome nao pode ser usado',
+        error: 'Este nome não pode ser usado',
       });
     }
 
