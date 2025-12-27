@@ -124,10 +124,12 @@ export async function POST(request: NextRequest) {
     index[`${domain}:${slug}`] = { token, createdAt: now };
     await saveBoxesIndex(index);
 
-    // Build URLs based on the request host (for localhost development)
-    const host = request.headers.get('host') || domain;
-    const protocol = host.includes('localhost') ? 'http' : 'https';
-    const baseUrl = `${protocol}://${host}`;
+    // Build URLs based on the selected domain
+    const host = request.headers.get('host') || '';
+    const isLocalhost = host.includes('localhost');
+    const protocol = isLocalhost ? 'http' : 'https';
+    // Em localhost, usa o host local; em producao, usa o dominio selecionado
+    const baseUrl = isLocalhost ? `${protocol}://${host}` : `${protocol}://${domain}`;
 
     return NextResponse.json({
       slug,
