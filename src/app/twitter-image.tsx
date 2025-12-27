@@ -1,8 +1,4 @@
 import { ImageResponse } from 'next/og';
-import { headers } from 'next/headers';
-import { ALLOWED_DOMAINS } from '@/types';
-
-export const runtime = 'edge';
 
 export const alt = 'Email Temporario e Mensagens Anonimas';
 export const size = {
@@ -12,10 +8,6 @@ export const size = {
 export const contentType = 'image/png';
 
 export default async function Image() {
-  const headersList = await headers();
-  const host = headersList.get('host') || '';
-  const domain = ALLOWED_DOMAINS.find(d => host.includes(d)) || 'porranenhuma.com';
-
   return new ImageResponse(
     (
       <div
@@ -30,7 +22,6 @@ export default async function Image() {
           fontFamily: 'system-ui, sans-serif',
         }}
       >
-        {/* Envelope Icon */}
         <div
           style={{
             display: 'flex',
@@ -39,20 +30,22 @@ export default async function Image() {
             marginBottom: 30,
           }}
         >
-          <svg
-            width="100"
-            height="100"
-            viewBox="0 0 120 120"
-            fill="none"
+          <div
+            style={{
+              width: 100,
+              height: 100,
+              backgroundColor: 'white',
+              borderRadius: 16,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 50,
+            }}
           >
-            <rect x="10" y="30" width="100" height="70" rx="8" fill="white" />
-            <path d="M10 40L60 75L110 40" stroke="#8B5CF6" strokeWidth="6" strokeLinecap="round" />
-            <circle cx="60" cy="55" r="15" fill="#8B5CF6" opacity="0.2" />
-            <text x="52" y="62" fill="#7C3AED" fontSize="20" fontWeight="bold">@</text>
-          </svg>
+            @
+          </div>
         </div>
 
-        {/* Domain */}
         <div
           style={{
             fontSize: 56,
@@ -60,22 +53,19 @@ export default async function Image() {
             color: 'white',
             marginBottom: 12,
             textAlign: 'center',
-            textShadow: '0 4px 20px rgba(0,0,0,0.3)',
           }}
         >
-          {domain}
+          Email Temporario
         </div>
 
-        {/* Subtitle */}
         <div
           style={{
             fontSize: 26,
             color: 'rgba(255,255,255,0.9)',
-            marginBottom: 30,
             textAlign: 'center',
           }}
         >
-          Email Temporario + Mensagens Anonimas | Gratis | Sem Cadastro
+          + Mensagens Anonimas | Gratis | Sem Cadastro
         </div>
       </div>
     ),
